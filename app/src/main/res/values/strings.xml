@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">hue-shift</string>
+    <string name="app_tagline">Colour filters for your whole screen</string>
+
+    <!-- Filters -->
+    <string name="filter_grayscale">Grayscale</string>
+    <string name="filter_grayscale_description">Removes all colour. Calmer and less distracting.</string>
+    <string name="filter_orange">Orange</string>
+    <string name="filter_orange_description">Warm tint without blue light, for the evening.</string>
+    <string name="filter_inverted">Inverted colours</string>
+    <string name="filter_inverted_description">Light turns dark, hues stay recognisable.</string>
+    <string name="filter_negative">Negative</string>
+    <string name="filter_negative_description">Minus colours: every colour becomes its opposite.</string>
+    <string name="filter_redscale">Red scale</string>
+    <string name="filter_redscale_description">Only shades of red. Gentle on night vision.</string>
+    <string name="filter_off">Off</string>
+    <string name="filter_off_description">Back to normal colours.</string>
+    <string name="filter_needs_full_mode">Needs Shizuku or root</string>
+    <string name="filter_approximation">Approximation in basic mode</string>
+
+    <!-- Main screen -->
+    <string name="action_about">About</string>
+    <string name="preview_label">Preview</string>
+    <string name="preview_status_live">Live on the whole screen</string>
+    <string name="preview_status_simulated">Preview only</string>
+    <string name="preview_status_normal">Normal colours</string>
+    <string name="preview_weather">Sunny</string>
+    <string name="preview_message">See you at 6? ☕</string>
+    <string name="preview_contact" translatable="false">Ania</string>
+    <string name="preview_time" translatable="false">12:45</string>
+    <string name="power_on">Filter on</string>
+    <string name="power_off">Filter off</string>
+    <string name="power_subtitle_applied">%1$s · whole screen</string>
+    <string name="power_subtitle_off">Tap to turn on: %1$s</string>
+    <string name="power_subtitle_needs_setup">Preview only. Set up a mode below</string>
+    <string name="power_subtitle_needs_full_mode">%1$s needs Shizuku or root</string>
+    <string name="intensity_title">Intensity</string>
+    <string name="intensity_value">%1$d%%</string>
+    <string name="section_filters">Filters</string>
+    <string name="section_mode">How it works</string>
+
+    <!-- Modes -->
+    <string name="engine_shizuku">Shizuku</string>
+    <string name="engine_root">Root</string>
+    <string name="engine_overlay">Overlay (basic mode)</string>
+    <string name="engine_shizuku_summary">All filters with exact colours, using the free Shizuku app.</string>
+    <string name="engine_root_summary">All filters with exact colours, for rooted phones.</string>
+    <string name="engine_overlay_summary">No extra apps needed. Only warm tints (orange, red).</string>
+    <string name="engine_active">Mode: %1$s</string>
+    <string name="engine_setup_title">Set up hue-shift</string>
+    <string name="engine_setup_text">Android only lets privileged apps recolour the whole screen. Pick a mode, it takes about a minute.</string>
+    <string name="engine_needs_full_mode">%1$s needs Shizuku or root. The basic mode can only tint the screen.</string>
+    <string name="engine_recommended">Recommended</string>
+    <string name="engine_in_use">In use</string>
+    <string name="state_ready">Ready</string>
+    <string name="state_not_installed">Shizuku is not installed</string>
+    <string name="state_not_running">Shizuku is not running</string>
+    <string name="state_needs_permission">Access not granted yet</string>
+    <string name="state_root_not_set_up">Not set up</string>
+    <string name="state_overlay_off">Service is off</string>
+    <string name="state_denied_shizuku">Access was denied in Shizuku</string>
+    <string name="state_denied_root">Root access is not available</string>
+    <string name="state_unsupported">Shizuku is too old, please update it</string>
+    <string name="state_error">The system rejected the change</string>
+
+    <!-- Setup sheet -->
+    <string name="setup_title">Choose how hue-shift works</string>
+    <string name="setup_intro">For security reasons Android does not let ordinary apps change the colours of other apps. hue-shift can do it in one of three ways:</string>
+    <string name="setup_shizuku_steps">1. Install Shizuku and start it (via Wireless debugging on Android 11+, or with ADB from a computer).\n2. Come back here and tap “Grant access”.</string>
+    <string name="setup_shizuku_reboot">After a phone restart Shizuku has to be started again. hue-shift then brings the filter back by itself.</string>
+    <string name="setup_root_steps">Your root manager (Magisk, KernelSU, APatch…) will ask once for permission.</string>
+    <string name="setup_overlay_steps">Turn on “hue-shift” in Settings → Accessibility. The service only draws the colour layer and never reads the screen.</string>
+    <string name="setup_overlay_restricted">Switch greyed out? Open App info → ⋮ → “Allow restricted settings” (Android 13+, apps installed from a file).</string>
+    <string name="setup_auto_hint">hue-shift picks the best ready mode automatically.</string>
+    <string name="setup_system_colours_note">While a filter is on, it takes priority over Night Light and the system colour correction.</string>
+    <string name="action_setup">Set up</string>
+    <string name="action_change">Change</string>
+    <string name="action_get_shizuku">Get Shizuku</string>
+    <string name="action_open_shizuku">Open Shizuku</string>
+    <string name="action_grant_access">Grant access</string>
+    <string name="action_use_root">Use root</string>
+    <string name="action_try_again">Try again</string>
+    <string name="action_open_accessibility">Open accessibility settings</string>
+    <string name="action_app_info">App info</string>
+    <string name="action_use_mode">Use this mode</string>
+    <string name="action_auto_mode">Choose automatically</string>
+    <string name="action_close">Close</string>
+
+    <!-- About -->
+    <string name="about_title">About hue-shift</string>
+    <string name="about_text">Open-source colour filters for the whole screen of your Android phone. No ads, no tracking and no internet permission.</string>
+    <string name="about_version">Version %1$s</string>
+    <string name="about_license">MIT License</string>
+    <string name="about_source">Source code</string>
+
+    <!-- Tile, widget, shortcut -->
+    <string name="tile_label" translatable="false">hue-shift</string>
+    <string name="quick_off">Off</string>
+    <string name="quick_needs_setup">Needs setup</string>
+    <string name="widget_label">hue-shift switch</string>
+    <string name="widget_description">Turn the colour filter on or off</string>
+    <string name="shortcut_toggle_short">Toggle filter</string>
+    <string name="shortcut_toggle_long">Turn the colour filter on or off</string>
+    <string name="toast_filter_on">%1$s on</string>
+    <string name="toast_filter_off">Filter off</string>
+
+    <!-- Accessibility service (basic mode) -->
+    <string name="overlay_service_label">hue-shift (basic mode)</string>
+    <string name="overlay_service_description">Draws a translucent colour layer over the whole screen for the orange and red filters of hue-shift\'s basic mode. The service does not read screen content, does not observe your actions and collects no data.</string>
+</resources>

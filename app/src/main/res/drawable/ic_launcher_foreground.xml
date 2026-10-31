@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The hue-shift mark: half colour wheel, half grayscale. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path android:pathData="M52.8,28 A26,26 0 0,0 52.8,80 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:centerX="52.8"
+                android:centerY="54"
+                android:type="sweep">
+                <item android:color="#FFFF6B9D" android:offset="0.0" />
+                <item android:color="#FFFF6B9D" android:offset="0.25" />
+                <item android:color="#FFFFA94D" android:offset="0.4" />
+                <item android:color="#FFFFE066" android:offset="0.5" />
+                <item android:color="#FF5EEAD4" android:offset="0.62" />
+                <item android:color="#FFA78BFA" android:offset="0.75" />
+                <item android:color="#FFFF6B9D" android:offset="1.0" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path android:pathData="M55.2,28 A26,26 0 0,1 55.2,80 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endColor="#FF4A4A5E"
+                android:endX="55.2"
+                android:endY="80"
+                android:startColor="#FFF4F4F8"
+                android:startX="55.2"
+                android:startY="28"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+</vector>

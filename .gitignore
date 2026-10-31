@@ -1,0 +1,28 @@
+# Gradle / build output
+.gradle/
+.kotlin/
+build/
+*/build/
+
+# Local configuration
+local.properties
+*.keystore
+*.jks
+keystore.properties
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.fleet/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Android Studio captures and native builds
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab

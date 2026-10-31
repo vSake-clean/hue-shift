@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_tagline">Filtry kolorów dla całego ekranu</string>
+
+    <!-- Filtry -->
+    <string name="filter_grayscale">Skala szarości</string>
+    <string name="filter_grayscale_description">Usuwa wszystkie kolory. Spokojniej i mniej rozprasza.</string>
+    <string name="filter_orange">Pomarańczowy</string>
+    <string name="filter_orange_description">Ciepły odcień bez niebieskiego światła, na wieczór.</string>
+    <string name="filter_inverted">Kolory odwrócone</string>
+    <string name="filter_inverted_description">Jasne staje się ciemne, odcienie zostają rozpoznawalne.</string>
+    <string name="filter_negative">Negatyw</string>
+    <string name="filter_negative_description">Kolory minusowe: każdy kolor zmienia się w przeciwny.</string>
+    <string name="filter_redscale">Skala czerwoności</string>
+    <string name="filter_redscale_description">Tylko odcienie czerwieni. Oszczędza wzrok w nocy.</string>
+    <string name="filter_off">Wyłączony</string>
+    <string name="filter_off_description">Powrót do normalnych kolorów.</string>
+    <string name="filter_needs_full_mode">Wymaga Shizuku lub roota</string>
+    <string name="filter_approximation">Przybliżenie w trybie podstawowym</string>
+
+    <!-- Ekran główny -->
+    <string name="action_about">O aplikacji</string>
+    <string name="preview_label">Podgląd</string>
+    <string name="preview_status_live">Na żywo na całym ekranie</string>
+    <string name="preview_status_simulated">Tylko podgląd</string>
+    <string name="preview_status_normal">Normalne kolory</string>
+    <string name="preview_weather">Słonecznie</string>
+    <string name="preview_message">Widzimy się o 18? ☕</string>
+    <string name="power_on">Filtr włączony</string>
+    <string name="power_off">Filtr wyłączony</string>
+    <string name="power_subtitle_applied">%1$s · cały ekran</string>
+    <string name="power_subtitle_off">Dotknij, aby włączyć: %1$s</string>
+    <string name="power_subtitle_needs_setup">Tylko podgląd. Skonfiguruj tryb działania poniżej</string>
+    <string name="power_subtitle_needs_full_mode">%1$s wymaga Shizuku lub roota</string>
+    <string name="intensity_title">Intensywność</string>
+    <string name="intensity_value">%1$d%%</string>
+    <string name="section_filters">Filtry</string>
+    <string name="section_mode">Sposób działania</string>
+
+    <!-- Tryby -->
+    <string name="engine_shizuku">Shizuku</string>
+    <string name="engine_root">Root</string>
+    <string name="engine_overlay">Nakładka (tryb podstawowy)</string>
+    <string name="engine_shizuku_summary">Wszystkie filtry i dokładne kolory dzięki darmowej aplikacji Shizuku.</string>
+    <string name="engine_root_summary">Wszystkie filtry i dokładne kolory na telefonach z rootem.</string>
+    <string name="engine_overlay_summary">Bez dodatkowych aplikacji. Tylko ciepłe odcienie (pomarańczowy, czerwony).</string>
+    <string name="engine_active">Tryb: %1$s</string>
+    <string name="engine_setup_title">Skonfiguruj hue-shift</string>
+    <string name="engine_setup_text">Android pozwala zmieniać kolory całego ekranu tylko uprzywilejowanym aplikacjom. Wybierz tryb, zajmie to około minuty.</string>
+    <string name="engine_needs_full_mode">%1$s wymaga Shizuku lub roota. Tryb podstawowy potrafi tylko zabarwić ekran.</string>
+    <string name="engine_recommended">Zalecane</string>
+    <string name="engine_in_use">W użyciu</string>
+    <string name="state_ready">Gotowe</string>
+    <string name="state_not_installed">Shizuku nie jest zainstalowane</string>
+    <string name="state_not_running">Shizuku nie jest uruchomione</string>
+    <string name="state_needs_permission">Dostęp nie został jeszcze przyznany</string>
+    <string name="state_root_not_set_up">Nieskonfigurowane</string>
+    <string name="state_overlay_off">Usługa jest wyłączona</string>
+    <string name="state_denied_shizuku">Odmówiono dostępu w Shizuku</string>
+    <string name="state_denied_root">Brak dostępu do roota</string>
+    <string name="state_unsupported">Shizuku jest zbyt stare, zaktualizuj je</string>
+    <string name="state_error">System odrzucił zmianę</string>
+
+    <!-- Konfiguracja -->
+    <string name="setup_title">Wybierz, jak działa hue-shift</string>
+    <string name="setup_intro">Ze względów bezpieczeństwa Android nie pozwala zwykłym aplikacjom zmieniać kolorów innych aplikacji. hue-shift potrafi to zrobić na jeden z trzech sposobów:</string>
+    <string name="setup_shizuku_steps">1. Zainstaluj Shizuku i uruchom je (przez debugowanie bezprzewodowe na Androidzie 11+ albo przez ADB z komputera).\n2. Wróć tutaj i dotknij „Udziel dostępu”.</string>
+    <string name="setup_shizuku_reboot">Po ponownym uruchomieniu telefonu trzeba znów uruchomić Shizuku. hue-shift sam przywróci wtedy filtr.</string>
+    <string name="setup_root_steps">Menedżer roota (Magisk, KernelSU, APatch…) jednorazowo zapyta o zgodę.</string>
+    <string name="setup_overlay_steps">Włącz „hue-shift” w Ustawieniach → Ułatwienia dostępu. Usługa tylko rysuje kolorową warstwę i nigdy nie odczytuje ekranu.</string>
+    <string name="setup_overlay_restricted">Przełącznik jest wyszarzony? Otwórz Informacje o aplikacji → ⋮ → „Zezwól na ustawienia z ograniczeniami” (Android 13+, aplikacje instalowane z pliku).</string>
+    <string name="setup_auto_hint">hue-shift sam wybiera najlepszy gotowy tryb.</string>
+    <string name="setup_system_colours_note">Gdy filtr jest włączony, ma pierwszeństwo przed Podświetleniem nocnym i systemową korekcją kolorów.</string>
+    <string name="action_setup">Konfiguruj</string>
+    <string name="action_change">Zmień</string>
+    <string name="action_get_shizuku">Pobierz Shizuku</string>
+    <string name="action_open_shizuku">Otwórz Shizuku</string>
+    <string name="action_grant_access">Udziel dostępu</string>
+    <string name="action_use_root">Użyj roota</string>
+    <string name="action_try_again">Spróbuj ponownie</string>
+    <string name="action_open_accessibility">Otwórz ułatwienia dostępu</string>
+    <string name="action_app_info">Informacje o aplikacji</string>
+    <string name="action_use_mode">Używaj tego trybu</string>
+    <string name="action_auto_mode">Wybieraj automatycznie</string>
+    <string name="action_close">Zamknij</string>
+
+    <!-- O aplikacji -->
+    <string name="about_title">O hue-shift</string>
+    <string name="about_text">Otwartoźródłowe filtry kolorów dla całego ekranu telefonu z Androidem. Bez reklam, bez śledzenia i bez dostępu do internetu.</string>
+    <string name="about_version">Wersja %1$s</string>
+    <string name="about_license">Licencja MIT</string>
+    <string name="about_source">Kod źródłowy</string>
+
+    <!-- Kafelek, widżet, skrót -->
+    <string name="quick_off">Wyłączony</string>
+    <string name="quick_needs_setup">Wymaga konfiguracji</string>
+    <string name="widget_label">Przełącznik hue-shift</string>
+    <string name="widget_description">Włączaj i wyłączaj filtr kolorów</string>
+    <string name="shortcut_toggle_short">Przełącz filtr</string>
+    <string name="shortcut_toggle_long">Włącz lub wyłącz filtr kolorów</string>
+    <string name="toast_filter_on">Włączono: %1$s</string>
+    <string name="toast_filter_off">Filtr wyłączony</string>
+
+    <!-- Usługa ułatwień dostępu (tryb podstawowy) -->
+    <string name="overlay_service_label">hue-shift (tryb podstawowy)</string>
+    <string name="overlay_service_description">Rysuje półprzezroczystą kolorową warstwę na całym ekranie dla filtrów pomarańczowego i czerwonego w trybie podstawowym hue-shift. Usługa nie odczytuje zawartości ekranu, nie obserwuje Twoich działań i nie zbiera żadnych danych.</string>
+</resources>
