@@ -167,7 +167,7 @@ cd hue-shift
 ./gradlew testDebugUnitTest    # testy jednostkowe
 ```
 
-Wersja release powstaje poleceniem `./gradlew assembleRelease`. Aby podpisać ją własnym kluczem, ustaw zmienne środowiskowe `HUESHIFT_KEYSTORE_PATH`, `HUESHIFT_KEYSTORE_PASSWORD`, `HUESHIFT_KEY_ALIAS` i `HUESHIFT_KEY_PASSWORD`; bez nich APK zostanie podpisany kluczem debug. Wypchnięcie tagu, np. `v1.0.0`, uruchamia na GitHubie budowanie wersji i publikuje APK w zakładce Releases. Workflow użyje Twojego klucza, jeśli dodasz te same wartości jako sekrety repozytorium (klucz jako `HUESHIFT_KEYSTORE_BASE64`).
+Wersja release powstaje poleceniem `./gradlew assembleRelease`. Aby podpisać ją własnym kluczem, ustaw zmienne środowiskowe `HUESHIFT_KEYSTORE_PATH`, `HUESHIFT_KEYSTORE_PASSWORD`, `HUESHIFT_KEY_ALIAS` i `HUESHIFT_KEY_PASSWORD`; bez nich APK zostanie podpisany kluczem debug. Nowe wydanie z APK w zakładce Releases publikuje workflow **Release**: wypchnij tag, np. `v1.0.0`, albo uruchom go ręcznie (Actions → Release → Run workflow) i wpisz numer wersji. Workflow użyje Twojego klucza, jeśli dodasz te same wartości jako sekrety repozytorium (klucz jako `HUESHIFT_KEYSTORE_BASE64`).
 
 Obrazy w tym pliku generuje test: `./gradlew testDebugUnitTest -Phueshift.screenshots`.
 
