@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.IBinder
 import android.os.Parcel
 import android.util.Log
+import io.github.vsakeclean.hueshift.filter.ColorTransform
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +28,15 @@ class ShizukuEngine(private val context: Context) : FilterEngine {
 
     @Volatile private var lastError: Throwable? = null
     @Volatile private var surfaceFlinger: IBinder? = null
+
+    /** Set when the direct binder call is refused but the shell command works (e.g. some HyperOS builds). */
+    @Volatile private var useShellCommand = false
+
+    private val _errorDetails = MutableStateFlow<String?>(null)
+    override val errorDetails: StateFlow<String?> = _errorDetails.asStateFlow()
+
+    // Shell commands are slower, so let every frame wait for the previous one instead.
+    override val frameIntervalMillis: Long get() = if (useShellCommand) 0L else 16L
 
     private val binderReceived = Shizuku.OnBinderReceivedListener {
         lastError = null
@@ -82,11 +92,45 @@ class ShizukuEngine(private val context: Context) : FilterEngine {
     /** Clears a previous error so the engine is tried again. */
     fun retry() {
         lastError = null
+        _errorDetails.value = null
         refresh()
     }
 
     override suspend fun show(rendering: Rendering?) = withContext(Dispatchers.IO) {
         val transform = (rendering as? Rendering.Matrix)?.transform
+        try {
+            if (useShellCommand) {
+                runShellCommand(transform)
+            } else {
+                try {
+                    transactDirectly(transform)
+                } catch (direct: Exception) {
+                    Log.w(TAG, "Direct SurfaceFlinger call failed, trying `service call`", direct)
+                    try {
+                        runShellCommand(transform)
+                    } catch (shell: Exception) {
+                        throw IllegalStateException("binder: ${direct.describe()}\nservice call: ${shell.describe()}", shell)
+                    }
+                    // The command works on this phone: keep using it.
+                    useShellCommand = true
+                }
+            }
+            if (lastError != null) {
+                lastError = null
+                _errorDetails.value = null
+                refresh()
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Setting the colour matrix through Shizuku failed", e)
+            lastError = e
+            _errorDetails.value = e.describe()
+            refresh()
+            throw e
+        }
+    }
+
+    /** Sends transaction 1015 straight to SurfaceFlinger, forwarded by the Shizuku service. */
+    private fun transactDirectly(transform: ColorTransform?) {
         val binder = surfaceFlinger?.takeIf { it.isBinderAlive }
             ?: SurfaceFlinger.findService()?.also { surfaceFlinger = it }
             ?: error("SurfaceFlinger service not found")
@@ -97,20 +141,21 @@ class ShizukuEngine(private val context: Context) : FilterEngine {
             ShizukuBinderWrapper(binder).transact(SurfaceFlinger.TRANSACTION_SET_COLOR_MATRIX, data, reply, 0)
             // Errors raised on the Shizuku side (e.g. revoked permission) come back in the reply.
             reply.readException()
-            if (lastError != null) {
-                lastError = null
-                refresh()
-            }
-        } catch (e: Exception) {
-            Log.w(TAG, "Setting the colour matrix through Shizuku failed", e)
-            lastError = e
-            refresh()
-            throw e
         } finally {
             data.recycle()
             reply.recycle()
         }
     }
+
+    /** The same change through the `service call` shell command, run with Shizuku's privileges. */
+    private fun runShellCommand(transform: ColorTransform?) {
+        val result = ShizukuShell.run(SurfaceFlinger.shellCommand(transform))
+        check(result.exitCode == 0 && !result.output.contains("Error")) {
+            result.output.ifBlank { "exit code ${result.exitCode}" }
+        }
+    }
+
+    private fun Throwable.describe(): String = "${javaClass.simpleName}: ${message ?: "-"}"
 
     companion object {
         const val MANAGER_PACKAGE = "moe.shizuku.privileged.api"

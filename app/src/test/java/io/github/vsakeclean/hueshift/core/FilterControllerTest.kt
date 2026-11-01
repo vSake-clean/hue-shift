@@ -58,6 +58,7 @@ class FilterControllerTest {
     ) : FilterEngine {
         override val state = MutableStateFlow(if (ready) EngineState.READY else EngineState.NOT_RUNNING)
         override val frameIntervalMillis = 4L
+        override val errorDetails = MutableStateFlow<String?>(null)
         val shown = CopyOnWriteArrayList<Rendering?>()
 
         override suspend fun show(rendering: Rendering?) {
@@ -265,5 +266,19 @@ class FilterControllerTest {
         controller.awaitRendered()
 
         assertTrue(engine.shown.isEmpty())
+    }
+
+    @Test
+    fun `engine errors are passed on to the UI state`() = runBlocking {
+        val engine = FakeEngine(EngineKind.SHIZUKU)
+        val controller = controller(storeFor(), engine)
+        controller.awaitLoaded()
+
+        engine.errorDetails.value = "SecurityException: denied"
+        engine.state.value = EngineState.ERROR
+        waitUntil { controller.state.value.engineErrors[EngineKind.SHIZUKU] == "SecurityException: denied" }
+
+        engine.errorDetails.value = null
+        waitUntil { controller.state.value.engineErrors.isEmpty() }
     }
 }

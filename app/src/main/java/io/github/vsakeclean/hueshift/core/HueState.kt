@@ -23,6 +23,8 @@ data class HueState(
     val renderingEngine: EngineKind?,
     /** For every filter id: the engine that would draw it (filters without one are missing). */
     val filterEngines: Map<String, EngineKind> = emptyMap(),
+    /** Why an engine failed, for the setup sheet. */
+    val engineErrors: Map<EngineKind, String> = emptyMap(),
 ) {
     val enabled: Boolean get() = settings.enabled
 

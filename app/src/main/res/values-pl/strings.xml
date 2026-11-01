@@ -69,6 +69,8 @@
     <string name="setup_root_steps">Menedżer roota (Magisk, KernelSU, APatch…) jednorazowo zapyta o zgodę.</string>
     <string name="setup_overlay_steps">Włącz „hue-shift” w Ustawieniach → Ułatwienia dostępu. Usługa tylko rysuje kolorową warstwę i nigdy nie odczytuje ekranu.</string>
     <string name="setup_overlay_restricted">Przełącznik jest wyszarzony? Otwórz Informacje o aplikacji → ⋮ → „Zezwól na ustawienia z ograniczeniami” (Android 13+, aplikacje instalowane z pliku).</string>
+    <string name="setup_shizuku_xiaomi">Xiaomi / HyperOS: w Opcjach programisty włącz też „Debugowanie USB (Ustawienia bezpieczeństwa)”, inaczej Shizuku zgłosi, że uprawnienia adb są ograniczone.</string>
+    <string name="setup_error_details">Szczegóły: %1$s</string>
     <string name="setup_auto_hint">hue-shift sam wybiera najlepszy gotowy tryb.</string>
     <string name="setup_system_colours_note">Gdy filtr jest włączony, ma pierwszeństwo przed Podświetleniem nocnym i systemową korekcją kolorów.</string>
     <string name="action_setup">Konfiguruj</string>
@@ -80,6 +82,7 @@
     <string name="action_try_again">Spróbuj ponownie</string>
     <string name="action_open_accessibility">Otwórz ułatwienia dostępu</string>
     <string name="action_app_info">Informacje o aplikacji</string>
+    <string name="action_developer_options">Opcje programisty</string>
     <string name="action_use_mode">Używaj tego trybu</string>
     <string name="action_auto_mode">Wybieraj automatycznie</string>
     <string name="action_close">Zamknij</string>

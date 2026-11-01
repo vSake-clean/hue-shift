@@ -63,6 +63,9 @@ class MainActivity : ComponentActivity() {
         onOpenAppInfo = {
             launch(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, "package:$packageName".toUri()))
         },
+        onOpenDeveloperOptions = {
+            if (!launch(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))) launch(Intent(Settings.ACTION_SETTINGS))
+        },
         onPreferEngine = controller::preferEngine,
         onRetry = controller::retry,
         onOpenUrl = { url -> launch(Intent(Intent.ACTION_VIEW, url.toUri())) },

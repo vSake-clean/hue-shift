@@ -153,6 +153,9 @@ The colour matrix is cleared on every reboot. With root hue-shift restores the f
 **Performance and battery**
 On most phones the colour matrix is applied by the display hardware, so the filter has practically no effect on battery life. On devices without that support the system composes the picture on the GPU, which may use a bit more power.
 
+**Xiaomi, Redmi, POCO (HyperOS / MIUI)**
+In Developer options also turn on **USB debugging (Security settings)**. Without it Shizuku says that ADB permissions are limited and cannot grant access. If hue-shift shows "The system rejected the change", the error details are shown right below; please include them in your report.
+
 **It does not work on my phone**
 Some manufacturers change how the picture is drawn. If the filter does not show up, please [open an issue](https://github.com/vSake-clean/hue-shift/issues) with your phone model, Android version and the mode you use.
 

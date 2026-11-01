@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import io.github.vsakeclean.hueshift.filter.ColorTransform
 import io.github.vsakeclean.hueshift.filter.HueFilter
 import io.github.vsakeclean.hueshift.filter.OverlayTint
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 /** The ways hue-shift can change the colours of the whole screen, best quality first. */
@@ -102,6 +103,9 @@ interface FilterEngine {
     /** Pause between animation frames. Engines whose [show] is slow can return 0. */
     val frameIntervalMillis: Long get() = 16L
 
+    /** Human-readable reason of the last failure, shown in the setup sheet. */
+    val errorDetails: StateFlow<String?> get() = NoErrorDetails
+
     /** Puts [rendering] on screen (`null` removes any effect). Throws if the system refused. */
     suspend fun show(rendering: Rendering?)
 
@@ -111,3 +115,5 @@ interface FilterEngine {
     /** Re-checks availability (e.g. after returning from the Shizuku app). */
     fun refresh() {}
 }
+
+private val NoErrorDetails: StateFlow<String?> = MutableStateFlow(null)

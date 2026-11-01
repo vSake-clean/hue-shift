@@ -153,6 +153,9 @@ Macierz kolorów jest kasowana przy każdym restarcie. Z rootem hue-shift przywr
 **Wydajność i bateria**
 Na większości telefonów macierz kolorów nakłada sprzęt wyświetlacza, więc filtr praktycznie nie wpływa na baterię. Na urządzeniach bez takiej obsługi system składa obraz na GPU, co może nieco zwiększyć zużycie energii.
 
+**Xiaomi, Redmi, POCO (HyperOS / MIUI)**
+W Opcjach programisty włącz także **Debugowanie USB (Ustawienia bezpieczeństwa)**. Bez tego Shizuku pokaże komunikat „Uprawnienia adb są ograniczone” i nie przyzna dostępu. Jeśli hue-shift pokaże „System odrzucił zmianę”, pod spodem znajdziesz szczegóły błędu; przyślij je w zgłoszeniu.
+
 **Nie działa na moim telefonie**
 Niektórzy producenci modyfikują sposób wyświetlania obrazu. Jeżeli filtr się nie pojawia, [zgłoś problem](https://github.com/vSake-clean/hue-shift/issues) i podaj model telefonu, wersję Androida i używany tryb.
 

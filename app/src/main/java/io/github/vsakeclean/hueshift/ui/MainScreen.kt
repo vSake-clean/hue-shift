@@ -76,6 +76,7 @@ class MainActions(
     val onRequestRoot: () -> Unit = {},
     val onOpenAccessibility: () -> Unit = {},
     val onOpenAppInfo: () -> Unit = {},
+    val onOpenDeveloperOptions: () -> Unit = {},
     val onPreferEngine: (EngineKind?) -> Unit = {},
     val onRetry: (EngineKind) -> Unit = {},
     val onOpenUrl: (String) -> Unit = {},

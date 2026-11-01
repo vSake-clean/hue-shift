@@ -63,7 +63,12 @@ class FilterController(
     private val engineStates: Flow<Map<EngineKind, EngineState>> =
         combine(engines.map { engine -> engine.state.map { engine.kind to it } }) { it.toMap() }
 
-    val state: StateFlow<HueState> = combine(settings.filterNotNull(), engineStates, ::buildState)
+    private val engineErrors: Flow<Map<EngineKind, String>> =
+        combine(engines.map { engine -> engine.errorDetails.map { engine.kind to it } }) { pairs ->
+            pairs.mapNotNull { (kind, error) -> error?.let { kind to it } }.toMap()
+        }
+
+    val state: StateFlow<HueState> = combine(settings.filterNotNull(), engineStates, engineErrors, ::buildState)
         .stateIn(scope, SharingStarted.Eagerly, HueState.Initial)
 
     fun start() {
@@ -175,8 +180,11 @@ class FilterController(
 
     private fun engine(kind: EngineKind): FilterEngine = engines.first { it.kind == kind }
 
-    private fun buildState(settings: HueSettings, states: Map<EngineKind, EngineState>): HueState =
-        buildHueState(settings, states, engines.map { it.kind })
+    private fun buildState(
+        settings: HueSettings,
+        states: Map<EngineKind, EngineState>,
+        errors: Map<EngineKind, String>,
+    ): HueState = buildHueState(settings, states, engines.map { it.kind }, errors)
 
     // region Rendering
 

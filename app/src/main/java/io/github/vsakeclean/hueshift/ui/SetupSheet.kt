@@ -1,5 +1,6 @@
 package io.github.vsakeclean.hueshift.ui
 
+import android.os.Build
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -28,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import io.github.vsakeclean.hueshift.R
 import io.github.vsakeclean.hueshift.core.HueState
@@ -93,6 +96,11 @@ fun SetupContent(state: HueState, actions: MainActions, modifier: Modifier = Mod
     }
 }
 
+/** Xiaomi, Redmi and POCO phones (MIUI / HyperOS) need an extra developer option for Shizuku. */
+private val isXiaomi: Boolean =
+    Build.MANUFACTURER.equals("Xiaomi", ignoreCase = true) ||
+        Build.BRAND.lowercase() in setOf("xiaomi", "redmi", "poco")
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun EngineOption(kind: EngineKind, state: HueState, actions: MainActions) {
@@ -126,9 +134,29 @@ private fun EngineOption(kind: EngineKind, state: HueState, actions: MainActions
             }
         }
         Text(stringResource(kind.summary), style = MaterialTheme.typography.bodyMedium, color = HueColors.TextSecondary)
+        val error = state.engineErrors[kind]
+        if (engineState == EngineState.ERROR && error != null) {
+            SelectionContainer {
+                Text(
+                    stringResource(R.string.setup_error_details, error),
+                    style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
+                    color = HueColors.Danger,
+                )
+            }
+        }
         if (!engineState.isReady) {
-            steps(kind).forEach { step ->
-                Text(stringResource(step), style = MaterialTheme.typography.bodySmall, color = HueColors.TextSecondary)
+            // Shizuku is already set up when the system refuses a change: skip the setup steps then.
+            if (engineState != EngineState.ERROR) {
+                steps(kind).forEach { step ->
+                    Text(stringResource(step), style = MaterialTheme.typography.bodySmall, color = HueColors.TextSecondary)
+                }
+            }
+            if (kind == EngineKind.SHIZUKU && isXiaomi) {
+                Text(
+                    stringResource(R.string.setup_shizuku_xiaomi),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = HueColors.Warning,
+                )
             }
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -148,13 +176,18 @@ private fun EngineButtons(kind: EngineKind, engineState: EngineState, inUse: Boo
     when {
         engineState.isReady && !inUse -> PrimaryButton(R.string.action_use_mode) { actions.onPreferEngine(kind) }
         engineState.isReady -> Unit
-        kind == EngineKind.SHIZUKU -> when (engineState) {
-            EngineState.NOT_INSTALLED, EngineState.UNSUPPORTED -> PrimaryButton(R.string.action_get_shizuku, actions.onGetShizuku)
-            EngineState.NOT_RUNNING, EngineState.DENIED -> {
-                PrimaryButton(R.string.action_open_shizuku, actions.onOpenShizuku)
+        kind == EngineKind.SHIZUKU -> {
+            when (engineState) {
+                EngineState.NOT_INSTALLED, EngineState.UNSUPPORTED ->
+                    PrimaryButton(R.string.action_get_shizuku, actions.onGetShizuku)
+                EngineState.NOT_RUNNING, EngineState.DENIED ->
+                    PrimaryButton(R.string.action_open_shizuku, actions.onOpenShizuku)
+                EngineState.NEEDS_PERMISSION -> PrimaryButton(R.string.action_grant_access, actions.onRequestShizuku)
+                else -> PrimaryButton(R.string.action_try_again) { actions.onRetry(kind) }
             }
-            EngineState.NEEDS_PERMISSION -> PrimaryButton(R.string.action_grant_access, actions.onRequestShizuku)
-            else -> PrimaryButton(R.string.action_try_again) { actions.onRetry(kind) }
+            if (engineState != EngineState.NOT_INSTALLED) {
+                SecondaryButton(R.string.action_developer_options, actions.onOpenDeveloperOptions)
+            }
         }
         kind == EngineKind.ROOT -> PrimaryButton(
             if (engineState == EngineState.NEEDS_PERMISSION) R.string.action_use_root else R.string.action_try_again,

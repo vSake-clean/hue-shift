@@ -14,6 +14,7 @@ fun buildHueState(
     settings: HueSettings,
     states: Map<EngineKind, EngineState>,
     engines: List<EngineKind> = EngineKind.entries,
+    errors: Map<EngineKind, String> = emptyMap(),
 ): HueState {
     fun engineFor(filter: HueFilter): EngineKind? {
         val candidates = engines.filter { states[it]?.isReady == true && it.supports(filter) }
@@ -40,5 +41,6 @@ fun buildHueState(
         filterEngines = buildMap {
             Filters.all.forEach { filter -> engineFor(filter)?.let { put(filter.id, it) } }
         },
+        engineErrors = errors,
     )
 }
