@@ -7,6 +7,7 @@ import io.github.vsakeclean.hueshift.core.SystemColourWatcher
 import io.github.vsakeclean.hueshift.engine.OverlayEngine
 import io.github.vsakeclean.hueshift.engine.RootEngine
 import io.github.vsakeclean.hueshift.engine.ShizukuEngine
+import io.github.vsakeclean.hueshift.engine.SystemSettingsEngine
 import io.github.vsakeclean.hueshift.quick.QuickToggles
 import io.github.vsakeclean.hueshift.settings.SettingsStore
 import kotlinx.coroutines.CoroutineScope
@@ -33,12 +34,13 @@ class AppGraph(private val app: Application) {
 
     val shizuku = ShizukuEngine(app)
     val root = RootEngine()
+    val system = SystemSettingsEngine(app)
     val overlay = OverlayEngine()
 
     val controller = FilterController(
         scope = scope,
         store = SettingsStore(app),
-        engines = listOf(shizuku, root, overlay),
+        engines = listOf(shizuku, root, system, overlay),
     )
 
     fun start() {

@@ -32,6 +32,8 @@ class HueFilter(
      * of the screen. Filters without it require Shizuku or root.
      */
     private val overlayTint: ((intensity: Float) -> OverlayTint)? = null,
+    /** The built-in Android feature with the same look, if there is one (always at full strength). */
+    val systemFeature: SystemFeature? = null,
 ) {
     val isOff: Boolean get() = id == Filters.OFF_ID
 

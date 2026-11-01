@@ -77,6 +77,7 @@ class MainActions(
     val onOpenAccessibility: () -> Unit = {},
     val onOpenAppInfo: () -> Unit = {},
     val onOpenDeveloperOptions: () -> Unit = {},
+    val onGrantSystem: () -> Unit = {},
     val onPreferEngine: (EngineKind?) -> Unit = {},
     val onRetry: (EngineKind) -> Unit = {},
     val onOpenUrl: (String) -> Unit = {},
@@ -124,7 +125,8 @@ fun MainScreen(
                 Entrance(1) { PreviewCard(state) }
                 Entrance(2) { PowerCard(state, onToggle = actions.onToggle) }
                 AnimatedVisibility(
-                    visible = state.enabled && state.selected.supportsIntensity,
+                    visible = state.enabled && state.selected.supportsIntensity &&
+                        state.engineForSelected?.supportsIntensity != false,
                     enter = expandVertically(tween(300)) + fadeIn(tween(300)),
                     exit = shrinkVertically(tween(250)) + fadeOut(tween(200)),
                 ) {

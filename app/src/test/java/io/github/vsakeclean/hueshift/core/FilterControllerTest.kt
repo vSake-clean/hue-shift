@@ -7,6 +7,7 @@ import io.github.vsakeclean.hueshift.engine.FilterEngine
 import io.github.vsakeclean.hueshift.engine.Rendering
 import io.github.vsakeclean.hueshift.filter.Filters
 import io.github.vsakeclean.hueshift.filter.HueFilter
+import io.github.vsakeclean.hueshift.filter.SystemFeature
 import io.github.vsakeclean.hueshift.settings.HueSettings
 import io.github.vsakeclean.hueshift.settings.SettingsStore
 import kotlinx.coroutines.CoroutineScope
@@ -280,5 +281,34 @@ class FilterControllerTest {
 
         engine.errorDetails.value = null
         waitUntil { controller.state.value.engineErrors.isEmpty() }
+    }
+
+    @Test
+    fun `system features take over grayscale when Shizuku is refused`() = runBlocking {
+        val shizuku = FakeEngine(EngineKind.SHIZUKU)
+        val system = FakeEngine(EngineKind.SYSTEM)
+        val overlay = FakeEngine(EngineKind.OVERLAY)
+        val controller = controller(storeFor(), shizuku, system, overlay)
+        controller.awaitLoaded()
+        shizuku.state.value = EngineState.ERROR
+        waitUntil { controller.state.value.stateOf(EngineKind.SHIZUKU) == EngineState.ERROR }
+
+        controller.select(Filters.Grayscale)
+        controller.awaitRendered()
+        // Built-in features switch at once, without animation frames.
+        assertEquals(listOf<Rendering?>(Rendering.System(SystemFeature.GRAYSCALE)), system.shown.toList())
+        assertTrue("shizuku: ${shizuku.shown}", shizuku.shown.isEmpty())
+
+        // Orange is not a built-in feature: the overlay draws it and the system feature is switched off.
+        controller.select(Filters.Orange)
+        controller.awaitRendered()
+        assertNull(system.shown.last())
+        assertTrue("overlay: ${overlay.shown}", overlay.shown.last() is Rendering.Tint)
+
+        // Negative needs a colour matrix, which nothing can draw here.
+        controller.select(Filters.Negative)
+        controller.awaitRendered()
+        assertFalse("applied: ${controller.state.value}", controller.state.value.isAppliedSystemWide)
+        assertTrue("needs full: ${controller.state.value}", controller.state.value.selectedNeedsFullMode)
     }
 }

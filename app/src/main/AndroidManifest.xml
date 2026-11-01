@@ -5,6 +5,12 @@
     <!-- Puts the filter back after a reboot. hue-shift has no internet permission at all. -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!-- Lets hue-shift switch Android's own grayscale and colour inversion. It cannot be granted
+         from the app: it is given once through Shizuku or `adb shell pm grant`. -->
+    <uses-permission
+        android:name="android.permission.WRITE_SECURE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+
     <!-- Lets the app see whether the Shizuku app is installed (Android 11+ package visibility). -->
     <queries>
         <package android:name="moe.shizuku.privileged.api" />

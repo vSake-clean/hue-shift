@@ -66,6 +66,7 @@ class MainActivity : ComponentActivity() {
         onOpenDeveloperOptions = {
             if (!launch(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS))) launch(Intent(Settings.ACTION_SETTINGS))
         },
+        onGrantSystem = { lifecycleScope.launch { controller.grantSystemFeatures() } },
         onPreferEngine = controller::preferEngine,
         onRetry = controller::retry,
         onOpenUrl = { url -> launch(Intent(Intent.ACTION_VIEW, url.toUri())) },

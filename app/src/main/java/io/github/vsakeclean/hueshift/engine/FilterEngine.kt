@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import io.github.vsakeclean.hueshift.filter.ColorTransform
 import io.github.vsakeclean.hueshift.filter.HueFilter
 import io.github.vsakeclean.hueshift.filter.OverlayTint
+import io.github.vsakeclean.hueshift.filter.SystemFeature
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -15,22 +16,31 @@ enum class EngineKind {
     /** SurfaceFlinger colour matrix, sent through `su`. */
     ROOT,
 
+    /** Android's own grayscale and colour inversion, switched through system settings. */
+    SYSTEM,
+
     /** Translucent colour layer drawn by an accessibility service; only warm tints. */
     OVERLAY,
     ;
 
     /** True for engines that apply exact colour matrices (and therefore support every filter). */
-    val appliesMatrix: Boolean get() = this != OVERLAY
+    val appliesMatrix: Boolean get() = this == SHIZUKU || this == ROOT
 
-    fun supports(filter: HueFilter): Boolean = appliesMatrix || filter.supportsOverlay
+    /** Whether the intensity slider changes anything with this engine. */
+    val supportsIntensity: Boolean get() = this != SYSTEM
+
+    fun supports(filter: HueFilter): Boolean = when (this) {
+        SHIZUKU, ROOT -> true
+        SYSTEM -> filter.systemFeature != null
+        OVERLAY -> filter.supportsOverlay
+    }
 
     /** How this kind of engine draws [filter] at [intensity], or `null` if it cannot. */
-    fun renderingFor(filter: HueFilter, intensity: Float): Rendering? =
-        if (appliesMatrix) {
-            Rendering.Matrix(filter.transformAt(intensity))
-        } else {
-            filter.overlayTintAt(intensity)?.let(Rendering::Tint)
-        }
+    fun renderingFor(filter: HueFilter, intensity: Float): Rendering? = when (this) {
+        SHIZUKU, ROOT -> Rendering.Matrix(filter.transformAt(intensity))
+        SYSTEM -> filter.systemFeature?.let(Rendering::System)
+        OVERLAY -> filter.overlayTintAt(intensity)?.let(Rendering::Tint)
+    }
 }
 
 enum class EngineState {
@@ -68,6 +78,10 @@ sealed interface Rendering {
 
     @Immutable
     data class Tint(val tint: OverlayTint) : Rendering
+
+    /** A built-in Android colour feature; it switches at once and cannot be animated by us. */
+    @Immutable
+    data class System(val feature: SystemFeature) : Rendering
 
     companion object {
         /**

@@ -78,12 +78,13 @@ Screenshots with a filter on show the screen the way you see it on the phone: th
 
 ## How does it work?
 
-For security reasons Android does not let ordinary apps change the colours of other apps. hue-shift uses the same mechanism as the system's Night Light and grayscale mode: the **colour matrix of SurfaceFlinger**, the process that composes the picture shown on the screen. The matrix is applied to the whole picture at once, so the filter covers every app, the status bar, the notifications and the keyboard. Only privileged processes may change it, which is why hue-shift needs one of three modes:
+For security reasons Android does not let ordinary apps change the colours of other apps. hue-shift uses the same mechanism as the system's Night Light and grayscale mode: the **colour matrix of SurfaceFlinger**, the process that composes the picture shown on the screen. The matrix is applied to the whole picture at once, so the filter covers every app, the status bar, the notifications and the keyboard. Only privileged processes may change it, which is why hue-shift needs one of these modes:
 
 | Mode | Requires | Filters | Notes |
 |---|---|---|---|
 | **Shizuku** (recommended) | the free [Shizuku](https://shizuku.rikka.app/) app | all, exact colours | after a reboot Shizuku has to be started again |
 | **Root** | Magisk, KernelSU, APatch… | all, exact colours | the filter comes back by itself after every reboot |
+| **System features** | a one-time permission through Shizuku or ADB | grayscale, inverted colours | Android's built-in features; afterwards works without Shizuku, also after a reboot |
 | **Overlay** (basic mode) | enabling an accessibility service | orange, red (≈) | no extra apps, but it can only tint the screen |
 
 hue-shift picks the best mode that is ready; you can choose another one in the mode settings. Before any mode is set up, the filters work in the preview, so you can try them out first.
@@ -111,6 +112,18 @@ In the app, scroll down to **How it works** and tap **Set up**.
 3. Go back to hue-shift, tap **Grant access** and accept Shizuku's dialog.
 
 Done. After a reboot (without root) Shizuku has to be started again; hue-shift then restores the last filter by itself.
+
+### System features mode
+
+This mode switches Android's built-in grayscale and colour inversion. It helps on phones where the system does not let Shizuku change the colour matrix (e.g. Xiaomi with HyperOS), and when you do not want to start Shizuku after every reboot.
+
+1. Start Shizuku and grant hue-shift access, as in Shizuku mode.
+2. In hue-shift tap **Grant with Shizuku** on the **System features** card. Or run this on a computer:
+   ```
+   adb shell pm grant io.github.vsakeclean.hueshift android.permission.WRITE_SECURE_SETTINGS
+   ```
+
+The permission stays. From then on grayscale and inverted colours work without Shizuku, and the system keeps them after a reboot. The intensity cannot be adjusted in this mode.
 
 ### Root mode
 
@@ -154,7 +167,7 @@ The colour matrix is cleared on every reboot. With root hue-shift restores the f
 On most phones the colour matrix is applied by the display hardware, so the filter has practically no effect on battery life. On devices without that support the system composes the picture on the GPU, which may use a bit more power.
 
 **Xiaomi, Redmi, POCO (HyperOS / MIUI)**
-In Developer options also turn on **USB debugging (Security settings)**. Without it Shizuku says that ADB permissions are limited and cannot grant access. If hue-shift shows "The system rejected the change", the error details are shown right below; please include them in your report.
+In Developer options also turn on **USB debugging (Security settings)**. Without it Shizuku says that ADB permissions are limited and cannot grant access. On some HyperOS phones the system still does not let Shizuku change the colour matrix (error details: "Operation not permitted"). Then use the [System features mode](#system-features-mode) for grayscale and inverted colours and the overlay for orange and red. The negative filter is not available in that case.
 
 **It does not work on my phone**
 Some manufacturers change how the picture is drawn. If the filter does not show up, please [open an issue](https://github.com/vSake-clean/hue-shift/issues) with your phone model, Android version and the mode you use.

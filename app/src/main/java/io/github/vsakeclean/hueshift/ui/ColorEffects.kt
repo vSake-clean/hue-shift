@@ -60,6 +60,10 @@ data class PreviewEffect(
         /** How [filter] at [intensity] looks with the [engine] that would draw it. */
         fun of(filter: HueFilter, intensity: Float, engine: EngineKind?): PreviewEffect {
             if (filter.isOff) return None
+            // Android's own features have no intensity: show them at full strength.
+            filter.systemFeature?.takeIf { engine == EngineKind.SYSTEM }?.let {
+                return PreviewEffect(filter.id, transform = it.transform)
+            }
             val tint = if (engine == EngineKind.OVERLAY) filter.overlayTintAt(intensity) else null
             return if (tint != null) {
                 PreviewEffect(filter.id, tint = tint)
@@ -93,7 +97,11 @@ data class PreviewEffect(
 @Immutable
 class ScreenCompensation private constructor(private val rendering: Rendering?) {
 
-    private val inverse: ColorTransform? = (rendering as? Rendering.Matrix)?.transform
+    private val inverse: ColorTransform? = when (rendering) {
+        is Rendering.Matrix -> rendering.transform
+        is Rendering.System -> rendering.feature.transform
+        else -> null
+    }
         ?.takeIf { abs(abs(it.determinant) - 1f) < 0.05f }
         ?.inverse()
 

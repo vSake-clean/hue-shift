@@ -29,10 +29,14 @@ class ShizukuEngine(private val context: Context) : FilterEngine {
     @Volatile private var lastError: Throwable? = null
     @Volatile private var surfaceFlinger: IBinder? = null
 
+    // Some phones (e.g. Xiaomi with HyperOS) never let Shizuku change the colour matrix. That is
+    // remembered, so hue-shift goes straight to another mode until the user taps "Try again".
+    private val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+
     /** Set when the direct binder call is refused but the shell command works (e.g. some HyperOS builds). */
     @Volatile private var useShellCommand = false
 
-    private val _errorDetails = MutableStateFlow<String?>(null)
+    private val _errorDetails = MutableStateFlow(prefs.getString(KEY_REFUSED, null))
     override val errorDetails: StateFlow<String?> = _errorDetails.asStateFlow()
 
     // Shell commands are slower, so let every frame wait for the previous one instead.
@@ -61,7 +65,7 @@ class ShizukuEngine(private val context: Context) : FilterEngine {
             !Shizuku.pingBinder() -> if (isManagerInstalled()) EngineState.NOT_RUNNING else EngineState.NOT_INSTALLED
             Shizuku.isPreV11() -> EngineState.UNSUPPORTED
             Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED ->
-                if (lastError == null) EngineState.READY else EngineState.ERROR
+                if (lastError == null && !prefs.contains(KEY_REFUSED)) EngineState.READY else EngineState.ERROR
             Shizuku.shouldShowRequestPermissionRationale() -> EngineState.DENIED
             else -> EngineState.NEEDS_PERMISSION
         }
@@ -93,8 +97,18 @@ class ShizukuEngine(private val context: Context) : FilterEngine {
     fun retry() {
         lastError = null
         _errorDetails.value = null
+        prefs.edit().remove(KEY_REFUSED).apply()
         refresh()
     }
+
+    /** Shizuku is running and hue-shift may use it (even if it cannot change the colour matrix). */
+    val isAuthorized: Boolean
+        get() = try {
+            Shizuku.pingBinder() && !Shizuku.isPreV11() &&
+                Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
+        } catch (e: RuntimeException) {
+            false
+        }
 
     override suspend fun show(rendering: Rendering?) = withContext(Dispatchers.IO) {
         val transform = (rendering as? Rendering.Matrix)?.transform
@@ -109,7 +123,12 @@ class ShizukuEngine(private val context: Context) : FilterEngine {
                     try {
                         runShellCommand(transform)
                     } catch (shell: Exception) {
-                        throw IllegalStateException("binder: ${direct.describe()}\nservice call: ${shell.describe()}", shell)
+                        val details = "binder: ${direct.describe()}\nservice call: ${shell.describe()}"
+                        // Refused by the system itself (not a temporary problem): remember it.
+                        if (direct is SecurityException || shell.message.orEmpty().contains("not permitted")) {
+                            prefs.edit().putString(KEY_REFUSED, details).apply()
+                        }
+                        throw IllegalStateException(details, shell)
                     }
                     // The command works on this phone: keep using it.
                     useShellCommand = true
@@ -159,6 +178,8 @@ class ShizukuEngine(private val context: Context) : FilterEngine {
 
     companion object {
         const val MANAGER_PACKAGE = "moe.shizuku.privileged.api"
+        private const val PREFS = "shizuku_engine"
+        private const val KEY_REFUSED = "refused"
         private const val PERMISSION_REQUEST_CODE = 0x4853
         private const val TAG = "HueShift/Shizuku"
     }

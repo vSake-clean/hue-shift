@@ -7,6 +7,7 @@ import io.github.vsakeclean.hueshift.engine.FilterEngine
 import io.github.vsakeclean.hueshift.engine.Rendering
 import io.github.vsakeclean.hueshift.engine.RootEngine
 import io.github.vsakeclean.hueshift.engine.ShizukuEngine
+import io.github.vsakeclean.hueshift.engine.SystemSettingsEngine
 import io.github.vsakeclean.hueshift.filter.HueFilter
 import io.github.vsakeclean.hueshift.settings.HueSettings
 import io.github.vsakeclean.hueshift.settings.SettingsStore
@@ -53,6 +54,7 @@ class FilterController(
 
     private val shizuku: ShizukuEngine? get() = engines.firstNotNullOfOrNull { it as? ShizukuEngine }
     private val root: RootEngine? get() = engines.firstNotNullOfOrNull { it as? RootEngine }
+    private val system: SystemSettingsEngine? get() = engines.firstNotNullOfOrNull { it as? SystemSettingsEngine }
 
     private val settings = MutableStateFlow<HueSettings?>(null)
     private val saveRequests = Channel<HueSettings>(Channel.CONFLATED)
@@ -124,10 +126,14 @@ class FilterController(
         return granted
     }
 
+    /** Gives hue-shift the permission to switch the built-in colour features, using Shizuku. */
+    suspend fun grantSystemFeatures(): Boolean = system?.grantWithShizuku() == true
+
     fun retry(kind: EngineKind) {
         when (kind) {
             EngineKind.SHIZUKU -> shizuku?.retry()
             EngineKind.ROOT -> scope.launch { root?.connect() }
+            EngineKind.SYSTEM -> system?.refresh()
             EngineKind.OVERLAY -> Unit
         }
         reapply()
@@ -324,8 +330,10 @@ class FilterController(
         durationMs: Long,
         onFrame: (Rendering?) -> Unit,
     ) {
-        if (from == to) {
+        // Built-in system features switch at once: no frames to send.
+        if (from == to || from is Rendering.System || to is Rendering.System) {
             engine.show(to)
+            onFrame(to)
             return
         }
         val start = System.nanoTime()

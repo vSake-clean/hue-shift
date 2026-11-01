@@ -48,6 +48,7 @@ object Filters {
         supportsIntensity = true,
         defaultIntensity = 1f,
         transform = { t -> ColorTransform.Identity.lerp(GrayscaleFull, t) },
+        systemFeature = SystemFeature.GRAYSCALE,
     )
 
     /** Warm, blue-light-free orange: blue is removed first, then part of the green. */
@@ -71,6 +72,7 @@ object Filters {
         icon = { Icons.Rounded.InvertColors },
         accent = 0xFF4FD1FF,
         transform = { InvertedFull },
+        systemFeature = SystemFeature.INVERSION,
     )
 
     /** Photographic negative ("minus colours"): every colour turns into its opposite. */

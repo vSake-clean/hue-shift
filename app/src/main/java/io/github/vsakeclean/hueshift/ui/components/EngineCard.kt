@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Adb
 import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.rounded.Layers
+import androidx.compose.material.icons.rounded.SettingsAccessibility
 import androidx.compose.material.icons.rounded.Terminal
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -44,6 +45,7 @@ val EngineKind.icon: ImageVector
     get() = when (this) {
         EngineKind.SHIZUKU -> Icons.Rounded.Adb
         EngineKind.ROOT -> Icons.Rounded.Terminal
+        EngineKind.SYSTEM -> Icons.Rounded.SettingsAccessibility
         EngineKind.OVERLAY -> Icons.Rounded.Layers
     }
 
@@ -52,6 +54,7 @@ val EngineKind.title: Int
     get() = when (this) {
         EngineKind.SHIZUKU -> R.string.engine_shizuku
         EngineKind.ROOT -> R.string.engine_root
+        EngineKind.SYSTEM -> R.string.engine_system
         EngineKind.OVERLAY -> R.string.engine_overlay
     }
 
@@ -60,6 +63,7 @@ val EngineKind.summary: Int
     get() = when (this) {
         EngineKind.SHIZUKU -> R.string.engine_shizuku_summary
         EngineKind.ROOT -> R.string.engine_root_summary
+        EngineKind.SYSTEM -> R.string.engine_system_summary
         EngineKind.OVERLAY -> R.string.engine_overlay_summary
     }
 
@@ -69,7 +73,7 @@ fun stateText(kind: EngineKind, state: EngineState): Int = when (state) {
     EngineState.NOT_INSTALLED -> R.string.state_not_installed
     EngineState.NOT_RUNNING -> R.string.state_not_running
     EngineState.NEEDS_PERMISSION -> when (kind) {
-        EngineKind.SHIZUKU -> R.string.state_needs_permission
+        EngineKind.SHIZUKU, EngineKind.SYSTEM -> R.string.state_needs_permission
         EngineKind.ROOT -> R.string.state_root_not_set_up
         EngineKind.OVERLAY -> R.string.state_overlay_off
     }

@@ -78,12 +78,13 @@ Zrzuty z włączonym filtrem pokazują ekran tak, jak widać go na telefonie: fi
 
 ## Jak to działa?
 
-Ze względów bezpieczeństwa Android nie pozwala zwykłym aplikacjom zmieniać kolorów innych aplikacji. hue-shift korzysta z tego samego mechanizmu co systemowe Podświetlenie nocne i tryb skali szarości: **macierzy kolorów w SurfaceFlinger**, czyli w procesie, który składa obraz wyświetlany na ekranie. Macierz działa na cały obraz naraz, więc filtr obejmuje każdą aplikację, pasek stanu, powiadomienia i klawiaturę. Dostęp do niej mają jednak tylko procesy uprzywilejowane, dlatego hue-shift potrzebuje jednego z trzech trybów:
+Ze względów bezpieczeństwa Android nie pozwala zwykłym aplikacjom zmieniać kolorów innych aplikacji. hue-shift korzysta z tego samego mechanizmu co systemowe Podświetlenie nocne i tryb skali szarości: **macierzy kolorów w SurfaceFlinger**, czyli w procesie, który składa obraz wyświetlany na ekranie. Macierz działa na cały obraz naraz, więc filtr obejmuje każdą aplikację, pasek stanu, powiadomienia i klawiaturę. Dostęp do niej mają jednak tylko procesy uprzywilejowane, dlatego hue-shift potrzebuje jednego z tych trybów:
 
 | Tryb | Czego wymaga | Filtry | Uwagi |
 |---|---|---|---|
 | **Shizuku** (zalecany) | darmowej aplikacji [Shizuku](https://shizuku.rikka.app/) | wszystkie, dokładne kolory | po restarcie telefonu trzeba ponownie uruchomić Shizuku |
 | **Root** | Magisk, KernelSU, APatch… | wszystkie, dokładne kolory | filtr wraca sam po każdym restarcie |
+| **Funkcje systemu** | jednorazowego pozwolenia przez Shizuku albo ADB | skala szarości, kolory odwrócone | wbudowane funkcje Androida; potem działa bez Shizuku, także po restarcie |
 | **Nakładka** (tryb podstawowy) | włączenia usługi ułatwień dostępu | pomarańczowy, czerwony (≈) | bez dodatkowych aplikacji, ale tylko zabarwia ekran |
 
 hue-shift sam wybiera najlepszy gotowy tryb; w ustawieniach trybów można wskazać inny. Zanim skonfigurujesz którykolwiek tryb, filtry działają w podglądzie, więc możesz je spokojnie obejrzeć.
@@ -111,6 +112,18 @@ W aplikacji przewiń do sekcji **Sposób działania** i dotknij **Konfiguruj**.
 3. Wróć do hue-shift i dotknij **Udziel dostępu**, a następnie zaakceptuj okno Shizuku.
 
 Gotowe. Po ponownym uruchomieniu telefonu (bez roota) trzeba znów uruchomić Shizuku; hue-shift sam przywróci wtedy ostatni filtr.
+
+### Tryb „Funkcje systemu”
+
+Ten tryb włącza wbudowaną w Androida skalę szarości i odwrócenie kolorów. Przydaje się na telefonach, na których system nie pozwala Shizuku zmieniać macierzy kolorów (np. Xiaomi z HyperOS), i gdy nie chcesz uruchamiać Shizuku po każdym restarcie.
+
+1. Uruchom Shizuku i udziel hue-shift dostępu, jak w trybie Shizuku.
+2. W hue-shift dotknij **Nadaj przez Shizuku** w karcie **Funkcje systemu**. Możesz też wykonać na komputerze:
+   ```
+   adb shell pm grant io.github.vsakeclean.hueshift android.permission.WRITE_SECURE_SETTINGS
+   ```
+
+Pozwolenie zostaje na stałe. Od tej chwili skala szarości i kolory odwrócone działają bez Shizuku, a system pamięta je także po restarcie telefonu. Intensywności nie da się w tym trybie regulować.
 
 ### Tryb root
 
@@ -154,7 +167,7 @@ Macierz kolorów jest kasowana przy każdym restarcie. Z rootem hue-shift przywr
 Na większości telefonów macierz kolorów nakłada sprzęt wyświetlacza, więc filtr praktycznie nie wpływa na baterię. Na urządzeniach bez takiej obsługi system składa obraz na GPU, co może nieco zwiększyć zużycie energii.
 
 **Xiaomi, Redmi, POCO (HyperOS / MIUI)**
-W Opcjach programisty włącz także **Debugowanie USB (Ustawienia bezpieczeństwa)**. Bez tego Shizuku pokaże komunikat „Uprawnienia adb są ograniczone” i nie przyzna dostępu. Jeśli hue-shift pokaże „System odrzucił zmianę”, pod spodem znajdziesz szczegóły błędu; przyślij je w zgłoszeniu.
+W Opcjach programisty włącz także **Debugowanie USB (Ustawienia bezpieczeństwa)**. Bez tego Shizuku pokaże komunikat „Uprawnienia adb są ograniczone” i nie przyzna dostępu. Na części telefonów z HyperOS system i tak nie pozwala Shizuku zmieniać macierzy kolorów (szczegóły błędu: „Operation not permitted”). Wtedy skorzystaj z trybu [„Funkcje systemu”](#tryb-funkcje-systemu) dla skali szarości i odwróconych kolorów oraz z nakładki dla pomarańczowego i czerwonego. Negatywu nie da się wtedy włączyć.
 
 **Nie działa na moim telefonie**
 Niektórzy producenci modyfikują sposób wyświetlania obrazu. Jeżeli filtr się nie pojawia, [zgłoś problem](https://github.com/vSake-clean/hue-shift/issues) i podaj model telefonu, wersję Androida i używany tryb.

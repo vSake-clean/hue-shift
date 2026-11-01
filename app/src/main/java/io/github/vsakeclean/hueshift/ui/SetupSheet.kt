@@ -29,6 +29,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
@@ -135,7 +136,7 @@ private fun EngineOption(kind: EngineKind, state: HueState, actions: MainActions
         }
         Text(stringResource(kind.summary), style = MaterialTheme.typography.bodyMedium, color = HueColors.TextSecondary)
         val error = state.engineErrors[kind]
-        if (engineState == EngineState.ERROR && error != null) {
+        if (!engineState.isReady && error != null) {
             SelectionContainer {
                 Text(
                     stringResource(R.string.setup_error_details, error),
@@ -151,16 +152,34 @@ private fun EngineOption(kind: EngineKind, state: HueState, actions: MainActions
                     Text(stringResource(step), style = MaterialTheme.typography.bodySmall, color = HueColors.TextSecondary)
                 }
             }
-            if (kind == EngineKind.SHIZUKU && isXiaomi) {
+            if (kind == EngineKind.SHIZUKU && engineState == EngineState.ERROR) {
+                Text(
+                    stringResource(R.string.setup_shizuku_refused),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = HueColors.Warning,
+                )
+            } else if (kind == EngineKind.SHIZUKU && isXiaomi) {
                 Text(
                     stringResource(R.string.setup_shizuku_xiaomi),
                     style = MaterialTheme.typography.bodySmall,
                     color = HueColors.Warning,
                 )
             }
+            if (kind == EngineKind.SYSTEM) {
+                val command = "adb shell pm grant ${LocalContext.current.packageName} android.permission.WRITE_SECURE_SETTINGS"
+                SelectionContainer {
+                    Text(
+                        command,
+                        style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
+                        color = HueColors.TextSecondary,
+                    )
+                }
+            }
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            EngineButtons(kind, engineState, inUse, actions)
+            // Shizuku can still grant permissions when it may not change the colour matrix itself.
+            val shizukuUsable = state.stateOf(EngineKind.SHIZUKU).let { it.isReady || it == EngineState.ERROR }
+            EngineButtons(kind, engineState, inUse, shizukuUsable, actions)
         }
     }
 }
@@ -168,11 +187,18 @@ private fun EngineOption(kind: EngineKind, state: HueState, actions: MainActions
 private fun steps(kind: EngineKind): List<Int> = when (kind) {
     EngineKind.SHIZUKU -> listOf(R.string.setup_shizuku_steps, R.string.setup_shizuku_reboot)
     EngineKind.ROOT -> listOf(R.string.setup_root_steps)
+    EngineKind.SYSTEM -> listOf(R.string.setup_system_steps)
     EngineKind.OVERLAY -> listOf(R.string.setup_overlay_steps, R.string.setup_overlay_restricted)
 }
 
 @Composable
-private fun EngineButtons(kind: EngineKind, engineState: EngineState, inUse: Boolean, actions: MainActions) {
+private fun EngineButtons(
+    kind: EngineKind,
+    engineState: EngineState,
+    inUse: Boolean,
+    shizukuUsable: Boolean,
+    actions: MainActions,
+) {
     when {
         engineState.isReady && !inUse -> PrimaryButton(R.string.action_use_mode) { actions.onPreferEngine(kind) }
         engineState.isReady -> Unit
@@ -193,6 +219,12 @@ private fun EngineButtons(kind: EngineKind, engineState: EngineState, inUse: Boo
             if (engineState == EngineState.NEEDS_PERMISSION) R.string.action_use_root else R.string.action_try_again,
             actions.onRequestRoot,
         )
+        kind == EngineKind.SYSTEM ->
+            if (shizukuUsable) {
+                PrimaryButton(R.string.action_grant_with_shizuku, actions.onGrantSystem)
+            } else {
+                SecondaryButton(R.string.action_open_shizuku, actions.onOpenShizuku)
+            }
         else -> {
             PrimaryButton(R.string.action_open_accessibility, actions.onOpenAccessibility)
             SecondaryButton(R.string.action_app_info, actions.onOpenAppInfo)

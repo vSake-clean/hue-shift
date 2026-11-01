@@ -40,9 +40,11 @@
     <!-- Tryby -->
     <string name="engine_shizuku">Shizuku</string>
     <string name="engine_root">Root</string>
+    <string name="engine_system">Funkcje systemu</string>
     <string name="engine_overlay">Nakładka (tryb podstawowy)</string>
     <string name="engine_shizuku_summary">Wszystkie filtry i dokładne kolory dzięki darmowej aplikacji Shizuku.</string>
     <string name="engine_root_summary">Wszystkie filtry i dokładne kolory na telefonach z rootem.</string>
+    <string name="engine_system_summary">Wbudowana w Androida skala szarości i odwrócenie kolorów. Działa bez Shizuku, także po restarcie telefonu.</string>
     <string name="engine_overlay_summary">Bez dodatkowych aplikacji. Tylko ciepłe odcienie (pomarańczowy, czerwony).</string>
     <string name="engine_active">Tryb: %1$s</string>
     <string name="engine_setup_title">Skonfiguruj hue-shift</string>
@@ -63,12 +65,14 @@
 
     <!-- Konfiguracja -->
     <string name="setup_title">Wybierz, jak działa hue-shift</string>
-    <string name="setup_intro">Ze względów bezpieczeństwa Android nie pozwala zwykłym aplikacjom zmieniać kolorów innych aplikacji. hue-shift potrafi to zrobić na jeden z trzech sposobów:</string>
+    <string name="setup_intro">Ze względów bezpieczeństwa Android nie pozwala zwykłym aplikacjom zmieniać kolorów innych aplikacji. hue-shift potrafi to zrobić na kilka sposobów:</string>
     <string name="setup_shizuku_steps">1. Zainstaluj Shizuku i uruchom je (przez debugowanie bezprzewodowe na Androidzie 11+ albo przez ADB z komputera).\n2. Wróć tutaj i dotknij „Udziel dostępu”.</string>
     <string name="setup_shizuku_reboot">Po ponownym uruchomieniu telefonu trzeba znów uruchomić Shizuku. hue-shift sam przywróci wtedy filtr.</string>
     <string name="setup_root_steps">Menedżer roota (Magisk, KernelSU, APatch…) jednorazowo zapyta o zgodę.</string>
     <string name="setup_overlay_steps">Włącz „hue-shift” w Ustawieniach → Ułatwienia dostępu. Usługa tylko rysuje kolorową warstwę i nigdy nie odczytuje ekranu.</string>
     <string name="setup_overlay_restricted">Przełącznik jest wyszarzony? Otwórz Informacje o aplikacji → ⋮ → „Zezwól na ustawienia z ograniczeniami” (Android 13+, aplikacje instalowane z pliku).</string>
+    <string name="setup_shizuku_refused">Ten telefon nie pozwala Shizuku zmieniać macierzy kolorów. Do skali szarości i odwróconych kolorów użyj trybu „Funkcje systemu” poniżej, a do pomarańczowego i czerwonego nakładki.</string>
+    <string name="setup_system_steps">Wymaga jednorazowego pozwolenia. Gdy Shizuku działa, dotknij „Nadaj przez Shizuku” albo wykonaj na komputerze:</string>
     <string name="setup_shizuku_xiaomi">Xiaomi / HyperOS: w Opcjach programisty włącz też „Debugowanie USB (Ustawienia bezpieczeństwa)”, inaczej Shizuku zgłosi, że uprawnienia adb są ograniczone.</string>
     <string name="setup_error_details">Szczegóły: %1$s</string>
     <string name="setup_auto_hint">hue-shift sam wybiera najlepszy gotowy tryb.</string>
@@ -83,6 +87,7 @@
     <string name="action_open_accessibility">Otwórz ułatwienia dostępu</string>
     <string name="action_app_info">Informacje o aplikacji</string>
     <string name="action_developer_options">Opcje programisty</string>
+    <string name="action_grant_with_shizuku">Nadaj przez Shizuku</string>
     <string name="action_use_mode">Używaj tego trybu</string>
     <string name="action_auto_mode">Wybieraj automatycznie</string>
     <string name="action_close">Zamknij</string>
