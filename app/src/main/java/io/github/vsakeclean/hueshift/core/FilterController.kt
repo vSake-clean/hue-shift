@@ -88,6 +88,24 @@ class FilterController(
             }
         }
         scope.launch(Dispatchers.Default) { render() }
+        scope.launch { grantSystemFeaturesWhenShizukuIsRefused() }
+    }
+
+    /**
+     * When the phone refuses the colour matrix even to Shizuku (e.g. Xiaomi with HyperOS), Shizuku
+     * can still give hue-shift the permission for Android's own grayscale and colour inversion.
+     * Do that once by ourselves instead of sending the user to yet another button.
+     */
+    private suspend fun grantSystemFeaturesWhenShizukuIsRefused() {
+        val shizuku = shizuku ?: return
+        val system = system ?: return
+        state.first { current ->
+            current.loaded &&
+                current.stateOf(EngineKind.SYSTEM) == EngineState.NEEDS_PERMISSION &&
+                current.stateOf(EngineKind.SHIZUKU) == EngineState.ERROR &&
+                shizuku.isRefused && shizuku.isAuthorized
+        }
+        system.grantWithShizuku()
     }
 
     // region Actions

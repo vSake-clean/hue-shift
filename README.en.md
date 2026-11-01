@@ -167,7 +167,7 @@ The colour matrix is cleared on every reboot. With root hue-shift restores the f
 On most phones the colour matrix is applied by the display hardware, so the filter has practically no effect on battery life. On devices without that support the system composes the picture on the GPU, which may use a bit more power.
 
 **Xiaomi, Redmi, POCO (HyperOS / MIUI)**
-In Developer options also turn on **USB debugging (Security settings)**. Without it Shizuku says that ADB permissions are limited and cannot grant access. On some HyperOS phones the system still does not let Shizuku change the colour matrix (error details: "Operation not permitted"). Then use the [System features mode](#system-features-mode) for grayscale and inverted colours and the overlay for orange and red. The negative filter is not available in that case.
+In Developer options also turn on **USB debugging (Security settings)**. Without it Shizuku says that ADB permissions are limited and cannot grant access. On some HyperOS phones the system still does not let Shizuku change the colour matrix (error details: "Operation not permitted"). hue-shift then switches on the [System features mode](#system-features-mode) through Shizuku by itself: grayscale and inverted colours keep working, even without Shizuku. Use the overlay for orange and red. The negative filter is not available in that case.
 
 **It does not work on my phone**
 Some manufacturers change how the picture is drawn. If the filter does not show up, please [open an issue](https://github.com/vSake-clean/hue-shift/issues) with your phone model, Android version and the mode you use.

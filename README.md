@@ -167,7 +167,7 @@ Macierz kolorów jest kasowana przy każdym restarcie. Z rootem hue-shift przywr
 Na większości telefonów macierz kolorów nakłada sprzęt wyświetlacza, więc filtr praktycznie nie wpływa na baterię. Na urządzeniach bez takiej obsługi system składa obraz na GPU, co może nieco zwiększyć zużycie energii.
 
 **Xiaomi, Redmi, POCO (HyperOS / MIUI)**
-W Opcjach programisty włącz także **Debugowanie USB (Ustawienia bezpieczeństwa)**. Bez tego Shizuku pokaże komunikat „Uprawnienia adb są ograniczone” i nie przyzna dostępu. Na części telefonów z HyperOS system i tak nie pozwala Shizuku zmieniać macierzy kolorów (szczegóły błędu: „Operation not permitted”). Wtedy skorzystaj z trybu [„Funkcje systemu”](#tryb-funkcje-systemu) dla skali szarości i odwróconych kolorów oraz z nakładki dla pomarańczowego i czerwonego. Negatywu nie da się wtedy włączyć.
+W Opcjach programisty włącz także **Debugowanie USB (Ustawienia bezpieczeństwa)**. Bez tego Shizuku pokaże komunikat „Uprawnienia adb są ograniczone” i nie przyzna dostępu. Na części telefonów z HyperOS system i tak nie pozwala Shizuku zmieniać macierzy kolorów (szczegóły błędu: „Operation not permitted”). hue-shift sam włącza wtedy przez Shizuku tryb [„Funkcje systemu”](#tryb-funkcje-systemu): skala szarości i kolory odwrócone działają dalej, także bez Shizuku. Do pomarańczowego i czerwonego użyj nakładki. Negatywu nie da się wtedy włączyć.
 
 **Nie działa na moim telefonie**
 Niektórzy producenci modyfikują sposób wyświetlania obrazu. Jeżeli filtr się nie pojawia, [zgłoś problem](https://github.com/vSake-clean/hue-shift/issues) i podaj model telefonu, wersję Androida i używany tryb.

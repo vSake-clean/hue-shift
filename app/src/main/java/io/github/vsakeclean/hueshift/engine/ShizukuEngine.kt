@@ -101,6 +101,9 @@ class ShizukuEngine(private val context: Context) : FilterEngine {
         refresh()
     }
 
+    /** The system refused the colour matrix (remembered until "Try again"). */
+    val isRefused: Boolean get() = prefs.contains(KEY_REFUSED)
+
     /** Shizuku is running and hue-shift may use it (even if it cannot change the colour matrix). */
     val isAuthorized: Boolean
         get() = try {
